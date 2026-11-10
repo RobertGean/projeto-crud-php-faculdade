@@ -52,7 +52,9 @@ function url(string $rota = '', array $params = []): string
         return base_url() . '/index.php' . $consulta;
     }
 
-    return base_url() . '/index.php?' . http_build_query(['rota' => $rota] + $params);
+    // A "/" da rota fica sem codificar para o link ser legível: index.php?rota=clientes/editar&id=5
+    $rotaCodificada = implode('/', array_map('rawurlencode', explode('/', $rota)));
+    return base_url() . '/index.php?rota=' . $rotaCodificada . ($params ? '&' . http_build_query($params) : '');
 }
 
 /** URL de um arquivo dentro de public/. */

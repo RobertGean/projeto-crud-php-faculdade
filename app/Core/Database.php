@@ -81,14 +81,16 @@ final class Database
         parse_str($partes['query'] ?? '', $query);
         $sslmode = is_string($query['sslmode'] ?? null) ? $query['sslmode'] : 'require';
 
+        // A opção "endpoint" só é entendida pelo proxy do Neon; um PostgreSQL comum (local/Docker) a rejeitaria.
+        $opcoes = str_ends_with($host, '.neon.tech') ? "endpoint={$endpoint} --timezone={$timezone}" : "--timezone={$timezone}";
+
         $dsn = sprintf(
-            "pgsql:host=%s;port=%d;dbname=%s;sslmode=%s;options='endpoint=%s --timezone=%s'",
+            "pgsql:host=%s;port=%d;dbname=%s;sslmode=%s;options='%s'",
             $host,
             (int) $porta,
             $banco,
             $sslmode,
-            $endpoint,
-            $timezone
+            $opcoes
         );
 
         return [$dsn, $usuario, $senha];
