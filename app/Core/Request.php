@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Encapsula os dados da requisição HTTP ($_GET, $_POST, $_FILES, $_SERVER).
- * Os controllers leem a entrada sempre por aqui, nunca direto das superglobais.
- */
 final class Request
 {
     public function __construct(
@@ -33,7 +29,6 @@ final class Request
         return $this->metodo() === 'POST';
     }
 
-    /** Valor de texto vindo de GET ou POST (POST tem prioridade). Sempre retorna string. */
     public function texto(string $chave, string $padrao = ''): string
     {
         $valor = $this->post[$chave] ?? $this->query[$chave] ?? $padrao;
@@ -46,7 +41,6 @@ final class Request
         return $valor === false ? $padrao : $valor;
     }
 
-    /** Aceita "1234.56" e "1.234,56". Retorna null se vazio/inválido. */
     public function decimal(string $chave): ?float
     {
         return Validador::paraDecimal($this->texto($chave));
@@ -61,7 +55,6 @@ final class Request
         return $arquivo;
     }
 
-    /** Parâmetros de consulta (GET) — usados nos filtros e na paginação. */
     public function consulta(): array
     {
         return $this->query;
@@ -77,11 +70,6 @@ final class Request
         return $this->server['HTTP_REFERER'] ?? null;
     }
 
-    /**
-     * Descobre a rota pedida. Aceita os dois formatos:
-     *   index.php?rota=clientes/editar&id=5
-     *   /clientes/editar/5   (URL amigável via .htaccess ou php -S)
-     */
     public function rota(): string
     {
         if (isset($this->query['rota']) && is_string($this->query['rota'])) {
@@ -90,7 +78,6 @@ final class Request
             $caminho = (string) parse_url($this->server['REQUEST_URI'] ?? '/', PHP_URL_PATH);
             $caminho = rawurldecode($caminho);
 
-            // Remove o diretório base (ex.: "/public" ou "/meu-projeto/public").
             $base = rtrim(dirname(str_replace('\\', '/', $this->server['SCRIPT_NAME'] ?? '/index.php')), '/.');
             foreach ([$base, preg_replace('#/public$#', '', $base)] as $prefixo) {
                 if ($prefixo !== '' && str_starts_with($caminho, $prefixo . '/')) {

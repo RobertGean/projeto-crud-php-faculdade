@@ -11,20 +11,12 @@ use App\Patterns\Strategy\FormaPagamentoFactory;
 use App\Repositories\Contracts\VendaRepositoryInterface;
 use App\Repositories\VendaRepository;
 
-/**
- * SERVICE LAYER dos relatórios: normaliza filtros, monta os indicadores da tela,
- * obtém o relatório certo pela RelatorioFactory e gera o CSV.
- */
 final class RelatorioService
 {
     public function __construct(private VendaRepositoryInterface $vendas = new VendaRepository())
     {
     }
 
-    /**
-     * Converte a query string em filtros seguros. Período padrão: mês atual.
-     * @return array{data_inicio: string, data_fim: string, cliente_id: int, forma_pagamento: string, status: string, tipo: string}
-     */
     public function normalizarFiltros(array $entrada): array
     {
         $texto = static fn (string $chave): string => is_string($entrada[$chave] ?? null) ? trim($entrada[$chave]) : '';
@@ -51,7 +43,6 @@ final class RelatorioService
         ];
     }
 
-    /** Indicadores e gráficos da tela de relatórios. */
     public function painel(array $filtros): array
     {
         return [
@@ -66,7 +57,6 @@ final class RelatorioService
         return RelatorioFactory::criar($tipo, $this->vendas);
     }
 
-    /** Escreve o CSV (separador ";" e UTF-8 com BOM para abrir corretamente no Excel). */
     public function exportarCsv(Relatorio $relatorio, array $filtros, $saida): void
     {
         fwrite($saida, "\xEF\xBB\xBF");

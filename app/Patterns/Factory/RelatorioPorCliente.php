@@ -6,7 +6,6 @@ namespace App\Patterns\Factory;
 
 use App\Repositories\Contracts\VendaRepositoryInterface;
 
-/** Faturamento agrupado por cliente (vendas concluídas). */
 final class RelatorioPorCliente implements Relatorio
 {
     public function __construct(private VendaRepositoryInterface $vendas)

@@ -6,7 +6,6 @@ namespace App\Patterns\Factory;
 
 use App\Repositories\Contracts\VendaRepositoryInterface;
 
-/** Lista de vendas do período (respeita todos os filtros). */
 final class RelatorioPorPeriodo implements Relatorio
 {
     private const LIMITE = 5000;

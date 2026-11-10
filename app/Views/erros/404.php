@@ -1,5 +1,8 @@
 <?php
-/** @var string $titulo @var string $mensagem */
+/**
+ * @var string $titulo
+ * @var string $mensagem
+ */
 $mensagem = $mensagem ?? 'Página não encontrada.';
 ?>
 <div class="text-center py-5">

@@ -1,7 +1,3 @@
-# Use este arquivo SOMENTE quando não for possível apontar o DocumentRoot para public/
-# (ex.: hospedagem compartilhada em que o projeto fica dentro de public_html).
-# Ele redireciona tudo para public/, deixando app/, config/, .env etc. inacessíveis.
-
 Options -Indexes
 
 <FilesMatch "^\.env">

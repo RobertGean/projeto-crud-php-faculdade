@@ -2,14 +2,9 @@
 
 declare(strict_types=1);
 
-/*
- * Inicialização comum à web (public/index.php) e ao CLI (database/migrate.php).
- */
-
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
-// Autoload: usa o do Composer se existir; senão, um autoload PSR-4 próprio (hospedagem sem Composer).
 $autoloadComposer = BASE_PATH . '/vendor/autoload.php';
 if (is_file($autoloadComposer)) {
     require $autoloadComposer;

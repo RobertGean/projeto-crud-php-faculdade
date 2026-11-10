@@ -13,10 +13,6 @@ use App\Repositories\Contracts\ClienteRepositoryInterface;
 use App\Repositories\Contracts\ProdutoRepositoryInterface;
 use App\Repositories\ProdutoRepository;
 
-/**
- * SERVICE LAYER — regras do carrinho: só mexe em carrinho aberto, só aceita produto
- * ativo e nunca deixa a quantidade passar do estoque disponível.
- */
 final class CarrinhoService
 {
     public function __construct(
@@ -36,7 +32,6 @@ final class CarrinhoService
         return $this->carrinhos->buscarPorId($id) ?? throw new RegraNegocioException('Carrinho não encontrado.');
     }
 
-    /** @return Carrinho[] */
     public function abertos(): array
     {
         return $this->carrinhos->listarAbertos();
@@ -53,7 +48,6 @@ final class CarrinhoService
         return $this->adicionar($carrinhoId, $produto->id, $produto->nome, $produto->quantidade, $produto->precoUnitario, $quantidade);
     }
 
-    /** Adição rápida digitando o código do produto (leitor de código de barras). */
     public function adicionarPorCodigo(int $carrinhoId, string $cod, int $quantidade): string
     {
         $this->obterAberto($carrinhoId);
@@ -100,7 +94,6 @@ final class CarrinhoService
         $this->carrinhos->definirStatus($carrinhoId, Carrinho::CANCELADO);
     }
 
-    /** Exclusão física: apenas carrinhos cancelados ou abertos e vazios (finalizados guardam o vínculo com a venda). */
     public function excluir(int $carrinhoId): void
     {
         $carrinho = $this->obter($carrinhoId);

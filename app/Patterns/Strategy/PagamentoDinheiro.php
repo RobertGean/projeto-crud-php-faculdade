@@ -6,7 +6,6 @@ namespace App\Patterns\Strategy;
 
 use App\Core\RegraNegocioException;
 
-/** Dinheiro: 5% de desconto e cálculo de troco. */
 final class PagamentoDinheiro extends PagamentoBase
 {
     public function codigo(): string

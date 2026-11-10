@@ -1,5 +1,7 @@
 <?php
-/** @var \App\Models\Carrinho[] $abertos */
+/**
+ * @var \App\Models\Carrinho[] $abertos
+ */
 use App\Core\View;
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">

@@ -9,9 +9,6 @@ use App\Models\Cliente;
 use App\Repositories\Contracts\ClienteRepositoryInterface;
 use PDO;
 
-/**
- * PADRÃO REPOSITORY — acesso a dados de clientes (PostgreSQL).
- */
 final class ClienteRepository extends Repository implements ClienteRepositoryInterface
 {
     public function buscar(string $termo, int $limite, int $offset): array
@@ -104,7 +101,6 @@ final class ClienteRepository extends Repository implements ClienteRepositoryInt
         return array_map([Cliente::class, 'deLinha'], $stmt->fetchAll());
     }
 
-    /** @return array{0: string, 1: array} */
     private function filtro(string $termo): array
     {
         if ($termo === '') {

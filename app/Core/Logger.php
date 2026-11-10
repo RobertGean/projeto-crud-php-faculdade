@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Log em arquivo (storage/logs). Erros técnicos (PDO etc.) vão para cá e o usuário
- * vê apenas uma mensagem amigável.
- */
 final class Logger
 {
     public static function erro(string $mensagem, array $contexto = []): void
@@ -35,7 +31,6 @@ final class Logger
             $contexto ? ' ' . json_encode($contexto, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : ''
         );
 
-        // Se não for possível gravar (permissão), cai no error_log do PHP em vez de quebrar a página.
         if (@file_put_contents($diretorio . '/' . basename($arquivo), $linha, FILE_APPEND | LOCK_EX) === false) {
             error_log(trim($linha));
         }

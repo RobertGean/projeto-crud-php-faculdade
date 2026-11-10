@@ -2,13 +2,7 @@
 
 declare(strict_types=1);
 
-/*
- * FRONT CONTROLLER — ponto único de entrada da aplicação.
- *
- * Toda requisição passa por aqui: inicializa o ambiente, abre a sessão,
- * carrega a tabela de rotas e entrega a requisição ao Router.
- */
-
+// Front Controller: ponto único de entrada da aplicação.
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 use App\Core\Request;

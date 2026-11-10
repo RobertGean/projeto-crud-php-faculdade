@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-/**
- * Entidade Venda (tabelas vendas + venda_itens).
- */
 final class Venda
 {
     public const CONCLUIDA = 'concluida';
     public const CANCELADA = 'cancelada';
 
-    /** @param ItemVenda[] $itens */
     public function __construct(
         public ?int $id = null,
         public ?int $carrinhoId = null,

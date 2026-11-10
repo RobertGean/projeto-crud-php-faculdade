@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Proteção CSRF: um token aleatório por sessão, enviado em todo formulário POST
- * (csrf_field()) e conferido pelo Router antes de executar a ação.
- */
 final class Csrf
 {
     private const CHAVE = '_csrf_token';

@@ -1,13 +1,10 @@
 <?php
 /**
- * Botão que envia um POST (com CSRF) após confirmação no navegador.
- * A confirmação real acontece no servidor: as rotas de exclusão só aceitam POST com token válido.
- *
- * @var string $acao     rota (ex.: 'clientes/excluir')
- * @var int    $id
+ * @var string $acao
+ * @var int $id
  * @var string $rotulo
- * @var string $classe   classes do botão
- * @var string $mensagem texto da confirmação
+ * @var string $classe
+ * @var string $mensagem
  */
 $classe = $classe ?? 'btn btn-sm btn-outline-danger';
 $mensagem = $mensagem ?? 'Tem certeza?';

@@ -17,13 +17,6 @@ use App\Repositories\VendaRepository;
 use App\Services\RelatorioService;
 use App\Services\VendaService;
 
-/**
- * 3 – Relatórios de vendas (CRUD sobre as vendas).
- *  Read: index (filtros, indicadores, gráficos) e venda (cupom)
- *  Update: editar/atualizar (forma de pagamento e observação)
- *  Delete: cancelar (estorna estoque) e excluir (somente canceladas)
- *  Exportar: CSV do relatório filtrado
- */
 final class RelatorioController extends Controller
 {
     private RelatorioService $relatorios;
@@ -55,7 +48,6 @@ final class RelatorioController extends Controller
         ] + $this->relatorios->painel($filtros);
 
         if ($filtros['tipo'] === 'periodo') {
-            // A lista de vendas é paginada na tela (o CSV exporta tudo).
             $paginacao = new Paginacao($this->vendas->contar($filtros), $this->pagina(), (int) Config::get('por_pagina'));
             $dados['paginacao'] = $paginacao;
             $dados['vendas'] = $this->vendas->listar($filtros, $paginacao->porPagina, $paginacao->offset());
@@ -66,7 +58,6 @@ final class RelatorioController extends Controller
         $this->render('relatorios/index', $dados);
     }
 
-    /** READ detalhado – cupom da venda */
     public function venda(): void
     {
         $venda = $this->vendas->buscarPorId($this->id()) ?? $this->naoEncontrado('Venda não encontrada.');
@@ -77,7 +68,6 @@ final class RelatorioController extends Controller
         ]);
     }
 
-    /** UPDATE */
     public function editar(): void
     {
         $venda = $this->vendas->buscarPorId($this->id()) ?? $this->naoEncontrado('Venda não encontrada.');
@@ -112,7 +102,6 @@ final class RelatorioController extends Controller
         }
     }
 
-    /** DELETE lógico – cancela e estorna o estoque */
     public function cancelar(): void
     {
         $id = $this->id();
@@ -125,7 +114,6 @@ final class RelatorioController extends Controller
         $this->redirecionar('relatorios/venda', ['id' => $id]);
     }
 
-    /** DELETE físico – somente vendas canceladas */
     public function excluir(): void
     {
         $id = $this->id();

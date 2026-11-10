@@ -4,16 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Router usado pelo FRONT CONTROLLER (public/index.php).
- *
- * Mapeia "MÉTODO rota" => [Controller, método]. Um segmento numérico no fim da rota
- * (/clientes/editar/5) vira o parâmetro "id", então as duas formas de URL funcionam.
- * Toda requisição POST passa pela verificação de token CSRF antes de chegar ao controller.
- */
 final class Router
 {
-    /** @var array<string, array<string, array{0: class-string, 1: string}>> */
     private array $rotas = ['GET' => [], 'POST' => []];
 
     public function get(string $rota, array $acao): void
@@ -31,7 +23,6 @@ final class Router
         $metodo = $request->metodo();
         $rota = $request->rota();
 
-        // "/clientes/editar/5" => rota "clientes/editar" + id=5
         if (!$this->existe($rota) && preg_match('#^(.+)/(\d+)$#', $rota, $m)) {
             $rota = $m[1];
             $request->definirParametro('id', $m[2]);
@@ -57,7 +48,6 @@ final class Router
         }
 
         [$classe, $metodoController] = $acao;
-        /** @var Controller $controller */
         $controller = new $classe();
         $controller->definirRequest($request);
         $controller->$metodoController();

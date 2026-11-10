@@ -1,5 +1,7 @@
 <?php
-/** @var \App\Models\Venda $venda */
+/**
+ * @var \App\Models\Venda $venda
+ */
 use App\Core\View;
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 d-print-none">

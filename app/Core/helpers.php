@@ -2,23 +2,17 @@
 
 declare(strict_types=1);
 
-/*
- * Funções auxiliares usadas principalmente pelas Views.
- */
-
 use App\Core\Config;
 use App\Core\Csrf;
 use App\Patterns\Strategy\FormaPagamentoFactory;
 
 if (!function_exists('e')) {
-    /** Escapa qualquer valor para saída HTML (proteção contra XSS). */
     function e(mixed $valor): string
     {
         return htmlspecialchars((string) ($valor ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }
 
-/** Caminho base da aplicação na URL (ex.: "" no php -S, "/public" com o .htaccess da raiz). */
 function base_url(): string
 {
     static $base = null;
@@ -29,11 +23,6 @@ function base_url(): string
     return $base;
 }
 
-/**
- * Gera o link de uma rota.
- * url('clientes/editar', ['id' => 5]) => index.php?rota=clientes/editar&id=5  (padrão, funciona em qualquer servidor)
- *                                      => /clientes/editar/5                    (com APP_URL_AMIGAVEL=true)
- */
 function url(string $rota = '', array $params = []): string
 {
     $rota = trim($rota, '/');
@@ -52,18 +41,15 @@ function url(string $rota = '', array $params = []): string
         return base_url() . '/index.php' . $consulta;
     }
 
-    // A "/" da rota fica sem codificar para o link ser legível: index.php?rota=clientes/editar&id=5
     $rotaCodificada = implode('/', array_map('rawurlencode', explode('/', $rota)));
     return base_url() . '/index.php?rota=' . $rotaCodificada . ($params ? '&' . http_build_query($params) : '');
 }
 
-/** URL de um arquivo dentro de public/. */
 function asset(string $caminho): string
 {
     return base_url() . '/' . ltrim($caminho, '/');
 }
 
-/** URL da imagem do produto, com imagem padrão quando não houver arquivo. */
 function imagem_produto(?string $arquivo): string
 {
     if ($arquivo) {
@@ -75,13 +61,11 @@ function imagem_produto(?string $arquivo): string
     return asset('assets/img/sem-imagem.svg');
 }
 
-/** 1234.5 => "R$ 1.234,50" */
 function moeda(mixed $valor): string
 {
     return 'R$ ' . number_format((float) $valor, 2, ',', '.');
 }
 
-/** "2026-11-09" => "09/11/2026"; com hora => "09/11/2026 14:30". */
 function data_br(?string $data, bool $comHora = false): string
 {
     if ($data === null || $data === '') {
@@ -94,7 +78,6 @@ function data_br(?string $data, bool $comHora = false): string
     return date($comHora ? 'd/m/Y H:i' : 'd/m/Y', $timestamp);
 }
 
-/** "12345678909" => "123.456.789-09" */
 function cpf_formatado(?string $cpf): string
 {
     $digitos = preg_replace('/\D/', '', (string) $cpf);
@@ -104,7 +87,6 @@ function cpf_formatado(?string $cpf): string
     return substr($digitos, 0, 3) . '.' . substr($digitos, 3, 3) . '.' . substr($digitos, 6, 3) . '-' . substr($digitos, 9, 2);
 }
 
-/** Campo oculto com o token CSRF — obrigatório em todo formulário POST. */
 function csrf_field(): string
 {
     return '<input type="hidden" name="_csrf" value="' . e(Csrf::token()) . '">';
@@ -120,13 +102,11 @@ function checked(mixed $valor): string
     return $valor ? 'checked' : '';
 }
 
-/** Rótulo amigável de uma forma de pagamento ("pix" => "PIX"). */
 function rotulo_pagamento(?string $codigo): string
 {
     return FormaPagamentoFactory::rotulos()[$codigo] ?? (string) $codigo;
 }
 
-/** Badge Bootstrap para status de venda/carrinho. */
 function badge_status(string $status): string
 {
     $cores = [
@@ -141,7 +121,6 @@ function badge_status(string $status): string
     return '<span class="badge text-bg-' . $cor . '">' . e($rotulos[$status] ?? $status) . '</span>';
 }
 
-/** Mensagem de erro de validação de um campo (classe + texto) para os formulários. */
 function classe_erro(array $erros, string $campo): string
 {
     return isset($erros[$campo]) ? ' is-invalid' : '';

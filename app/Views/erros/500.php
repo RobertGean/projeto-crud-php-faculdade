@@ -1,5 +1,8 @@
 <?php
-/** @var string $mensagem @var string|null $detalhe (somente com APP_DEBUG=true) */
+/**
+ * @var string $mensagem
+ * @var string|null $detalhe
+ */
 $detalhe = $detalhe ?? null;
 ?>
 <div class="text-center py-5">

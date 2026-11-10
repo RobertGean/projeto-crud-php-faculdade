@@ -13,10 +13,6 @@ use App\Repositories\Contracts\ProdutoRepositoryInterface;
 use App\Repositories\ProdutoRepository;
 use App\Services\CarrinhoService;
 
-/**
- * PDV: busca rápida de produtos por nome ou código (substitui o pdv.php legado).
- * O antigo botão "Vender" (que só baixava estoque) agora adiciona o produto ao carrinho atual.
- */
 final class PdvController extends Controller
 {
     private ProdutoRepositoryInterface $produtos;
@@ -59,7 +55,6 @@ final class PdvController extends Controller
         $this->redirecionar('pdv', array_filter(['busca' => $busca]));
     }
 
-    /** Carrinho guardado na sessão, se ainda estiver aberto. */
     private function carrinhoAtual(): ?Carrinho
     {
         $id = (int) Session::get('carrinho_atual', 0);

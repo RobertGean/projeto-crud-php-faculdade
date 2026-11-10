@@ -1,12 +1,10 @@
 <?php
 /**
- * Busca de produtos por nome ou código, reaproveitada no PDV e na tela do carrinho.
- *
  * @var string $busca
  * @var \App\Models\Produto[] $resultados
- * @var string $rotaBusca     rota do formulário de busca (GET)
- * @var array  $paramsBusca   parâmetros extras da busca (ex.: id do carrinho)
- * @var string $rotaAdicionar rota POST que adiciona o produto
+ * @var string $rotaBusca
+ * @var array $paramsBusca
+ * @var string $rotaAdicionar
  * @var int|null $carrinhoId
  */
 $paramsBusca = $paramsBusca ?? [];

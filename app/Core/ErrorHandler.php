@@ -8,14 +8,6 @@ use ErrorException;
 use PDOException;
 use Throwable;
 
-/**
- * Tratamento global de erros.
- *
- * - Warnings/notices (ex.: "Undefined variable") viram exceções: não passam despercebidos
- *   como no error_log do sistema legado.
- * - Exceções não tratadas são registradas em storage/logs/app.log e o usuário vê uma
- *   página amigável. Detalhes técnicos só aparecem com APP_DEBUG=true.
- */
 final class ErrorHandler
 {
     public static function registrar(): void
@@ -68,7 +60,6 @@ final class ErrorHandler
         try {
             View::exibir('erros/500', $dados);
         } catch (Throwable) {
-            // Último recurso: se até a view falhar, mostra texto simples.
             echo '<h1>Erro no sistema</h1><p>' . htmlspecialchars($mensagem) . '</p>';
         }
     }

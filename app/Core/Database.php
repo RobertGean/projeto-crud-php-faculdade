@@ -7,20 +7,11 @@ namespace App\Core;
 use PDO;
 use RuntimeException;
 
-/**
- * PADRÃO SINGLETON (Criacional)
- *
- * Problema: cada script do sistema legado abria sua própria conexão. Com o Neon,
- * cada conexão nova custa um handshake TLS e conta no limite de conexões do plano.
- * Solução: uma única instância de PDO por requisição, obtida com Database::getInstance().
- * Todos os repositórios compartilham essa conexão — por isso uma transação aberta no
- * VendaService vale também para o ProdutoRepository usado pelos observers.
- */
+/** Singleton: uma única conexão PDO por requisição, compartilhada por todos os repositórios e pela transação da venda. */
 final class Database
 {
     private static ?PDO $instancia = null;
 
-    /** Construtor privado: ninguém faz "new Database()". */
     private function __construct()
     {
     }
@@ -49,16 +40,6 @@ final class Database
         return self::$instancia;
     }
 
-    /**
-     * Converte a URL do Neon (postgresql://user:senha@host/db?sslmode=require) em DSN do PDO.
-     *
-     * Lógica mantida do db.php legado: o endpoint ID (primeira parte do host, ex.: "ep-xxxx-pooler")
-     * é enviado em options='endpoint=...'. Isso resolve o erro "Endpoint ID is not specified"
-     * em hospedagens cuja libpq é antiga e não envia SNI. O fuso horário da sessão do
-     * PostgreSQL também é definido aqui (--timezone=America/Cuiaba).
-     *
-     * @return array{0: string, 1: string, 2: string} [dsn, usuario, senha]
-     */
     public static function montarDsn(string $url, string $timezone = 'America/Cuiaba'): array
     {
         if ($url === '') {
@@ -81,7 +62,7 @@ final class Database
         parse_str($partes['query'] ?? '', $query);
         $sslmode = is_string($query['sslmode'] ?? null) ? $query['sslmode'] : 'require';
 
-        // A opção "endpoint" só é entendida pelo proxy do Neon; um PostgreSQL comum (local/Docker) a rejeitaria.
+        // "endpoint=" evita o erro "Endpoint ID is not specified" do Neon em libpq sem SNI; um PostgreSQL comum rejeitaria a opção.
         $opcoes = str_ends_with($host, '.neon.tech') ? "endpoint={$endpoint} --timezone={$timezone}" : "--timezone={$timezone}";
 
         $dsn = sprintf(

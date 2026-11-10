@@ -1,4 +1,3 @@
-// Gráficos da tela de relatórios (Chart.js via CDN). Os dados vêm da view em JSON.
 (function () {
     var elemento = document.getElementById('dados-graficos');
     if (!elemento || typeof Chart === 'undefined') {

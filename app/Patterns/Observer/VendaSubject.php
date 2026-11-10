@@ -6,9 +6,7 @@ namespace App\Patterns\Observer;
 
 use App\Models\Venda;
 
-/**
- * PADRÃO OBSERVER — interface do "Subject" (quem é observado). Implementada pelo VendaService.
- */
+/** Observer: lado observado (Subject), implementado pelo VendaService. */
 interface VendaSubject
 {
     public function anexar(VendaObserver $observer): void;

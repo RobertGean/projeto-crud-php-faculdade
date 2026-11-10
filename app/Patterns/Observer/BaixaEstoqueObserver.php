@@ -7,14 +7,7 @@ namespace App\Patterns\Observer;
 use App\Models\Venda;
 use App\Repositories\Contracts\ProdutoRepositoryInterface;
 
-/**
- * Observer que mantém o estoque coerente com as vendas:
- *  - venda finalizada => baixa a quantidade vendida;
- *  - venda cancelada  => devolve (estorna) a quantidade ao estoque.
- *
- * Roda DENTRO da transação aberta pelo VendaService (mesma conexão Singleton):
- * se qualquer baixa falhar, a venda inteira sofre rollback.
- */
+/** Roda dentro da transação do VendaService: se uma baixa falhar, a venda inteira sofre rollback. */
 final class BaixaEstoqueObserver implements VendaObserver
 {
     public function __construct(private ProdutoRepositoryInterface $produtos)

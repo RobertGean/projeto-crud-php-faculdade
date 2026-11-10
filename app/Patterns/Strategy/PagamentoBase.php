@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Patterns\Strategy;
 
-/**
- * Comportamento comum às estratégias: aplicar o percentual sobre o subtotal.
- * Pagamentos eletrônicos (PIX/cartão) recebem exatamente o total e não têm troco.
- */
 abstract class PagamentoBase implements FormaPagamentoStrategy
 {
     public function aceitaTroco(): bool

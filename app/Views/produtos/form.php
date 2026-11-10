@@ -1,8 +1,6 @@
 <?php
 /**
- * Formulário compartilhado por "novo" e "editar". Sempre recebe $dados e $erros definidos.
  * @var array $dados
- * @var array<string, string> $erros
  * @var bool $editando
  */
 $acao = $editando ? url('produtos/atualizar') : url('produtos/salvar');

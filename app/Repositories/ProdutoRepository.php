@@ -8,9 +8,6 @@ use App\Core\RegraNegocioException;
 use App\Models\Produto;
 use App\Repositories\Contracts\ProdutoRepositoryInterface;
 
-/**
- * PADRÃO REPOSITORY — único lugar com SQL de produtos (implementação PostgreSQL).
- */
 final class ProdutoRepository extends Repository implements ProdutoRepositoryInterface
 {
     public function buscar(string $termo, int $limite, int $offset, bool $somenteAtivos = false): array
@@ -111,8 +108,7 @@ final class ProdutoRepository extends Repository implements ProdutoRepositoryInt
 
     public function baixarEstoque(int $id, int $quantidade): void
     {
-        // A condição "quantidade >= :minimo" garante que o estoque nunca fica negativo,
-        // mesmo com duas vendas simultâneas (além do CHECK no banco).
+        // "quantidade >= :minimo" impede estoque negativo mesmo com vendas simultâneas.
         $stmt = $this->db()->prepare(
             'UPDATE produtos SET quantidade = quantidade - :qtd WHERE id = :id AND quantidade >= :minimo'
         );
@@ -147,13 +143,12 @@ final class ProdutoRepository extends Repository implements ProdutoRepositoryInt
         return array_map([Produto::class, 'deLinha'], $stmt->fetchAll());
     }
 
-    /** @return array{0: string, 1: array} */
     private function filtro(string $termo, bool $somenteAtivos): array
     {
         $condicoes = [];
         $params = [];
         if ($termo !== '') {
-            // Parâmetros com nomes diferentes: com prepares nativos o PDO não aceita repetir o mesmo nome.
+            // Nomes diferentes porque, com prepares nativos, o PDO não aceita repetir o mesmo parâmetro.
             $condicoes[] = '(nome ILIKE :termo_nome OR cod ILIKE :termo_cod)';
             $params[':termo_nome'] = $this->termoLike($termo);
             $params[':termo_cod'] = $this->termoLike($termo);

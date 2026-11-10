@@ -9,9 +9,6 @@ use App\Models\Venda;
 use App\Repositories\Contracts\VendaRepositoryInterface;
 use PDO;
 
-/**
- * PADRÃO REPOSITORY — vendas, itens e consultas dos relatórios (PostgreSQL).
- */
 final class VendaRepository extends Repository implements VendaRepositoryInterface
 {
     private const SQL_VENDA = 'SELECT v.*, c.nome AS cliente_nome, c.cpf AS cliente_cpf
@@ -233,7 +230,6 @@ final class VendaRepository extends Repository implements VendaRepositoryInterfa
         $stmt->execute([':id' => $id]);
     }
 
-    /** @return ItemVenda[] */
     private function itens(int $vendaId): array
     {
         $stmt = $this->db()->prepare(
@@ -247,10 +243,6 @@ final class VendaRepository extends Repository implements VendaRepositoryInterfa
         return array_map([ItemVenda::class, 'deLinha'], $stmt->fetchAll());
     }
 
-    /**
-     * Monta o WHERE a partir dos filtros do relatório (sempre com parâmetros, nunca concatenando valores).
-     * @return array{0: string, 1: array}
-     */
     private function filtros(array $filtros, bool $somenteConcluidas = false): array
     {
         $condicoes = [];

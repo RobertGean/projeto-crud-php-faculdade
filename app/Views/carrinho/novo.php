@@ -1,5 +1,7 @@
 <?php
-/** @var \App\Models\Cliente[] $clientes */
+/**
+ * @var \App\Models\Cliente[] $clientes
+ */
 ?>
 <h1 class="h3 mb-3"><i class="bi bi-cart-plus"></i> Novo carrinho</h1>
 

@@ -6,7 +6,6 @@ namespace App\Patterns\Factory;
 
 use App\Repositories\Contracts\VendaRepositoryInterface;
 
-/** Quantidade e faturamento por produto (vendas concluídas). */
 final class RelatorioPorProduto implements Relatorio
 {
     public function __construct(private VendaRepositoryInterface $vendas)

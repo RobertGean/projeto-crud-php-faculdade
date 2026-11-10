@@ -1,7 +1,7 @@
 <?php
 /**
- * @var array $hoje  resumo de vendas de hoje
- * @var array $mes   resumo de vendas do mês
+ * @var array $hoje
+ * @var array $mes
  * @var \App\Models\Produto[] $estoqueBaixo
  * @var \App\Models\Produto[] $vencendo
  * @var int $abertos

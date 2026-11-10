@@ -2,7 +2,7 @@
 /**
  * @var \App\Core\Paginacao $paginacao
  * @var string $rota
- * @var array  $params  filtros atuais (mantidos ao trocar de página)
+ * @var array $params
  */
 $params = $params ?? [];
 if ($paginacao->totalPaginas <= 1) {

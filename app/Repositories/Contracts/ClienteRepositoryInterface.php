@@ -8,7 +8,6 @@ use App\Models\Cliente;
 
 interface ClienteRepositoryInterface
 {
-    /** @return Cliente[] busca por nome ou CPF */
     public function buscar(string $termo, int $limite, int $offset): array;
 
     public function contar(string $termo): int;
@@ -27,9 +26,7 @@ interface ClienteRepositoryInterface
 
     public function possuiVendas(int $id): bool;
 
-    /** @return Cliente[] clientes ativos para combos (carrinho, filtros) */
     public function listarAtivos(): array;
 
-    /** @return Cliente[] todos (inclusive inativos), para filtros de relatório */
     public function listarTodos(): array;
 }

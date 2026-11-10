@@ -1,8 +1,7 @@
 <?php
 /**
- * Layout principal.
- * @var string $conteudo HTML da view renderizada
- * @var array  $flashes  mensagens flash da sessão
+ * @var string $conteudo
+ * @var array $flashes
  */
 $titulo = $titulo ?? 'PDV';
 $menuAtivo = $menuAtivo ?? '';

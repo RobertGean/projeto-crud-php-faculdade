@@ -1,7 +1,6 @@
 <?php
 /**
- * @var array $dados   valores do formulário (mantidos quando há erro de validação)
- * @var array<string, string> $erros
+ * @var array $dados
  * @var bool $editando
  */
 $acao = $editando ? url('clientes/atualizar') : url('clientes/salvar');

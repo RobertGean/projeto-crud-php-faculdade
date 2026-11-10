@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-/**
- * Entidade Carrinho (tabelas carrinhos + carrinho_itens).
- */
 final class Carrinho
 {
     public const ABERTO = 'aberto';
     public const FINALIZADO = 'finalizado';
     public const CANCELADO = 'cancelado';
 
-    /** @param ItemCarrinho[] $itens */
     public function __construct(
         public ?int $id = null,
         public ?int $clienteId = null,

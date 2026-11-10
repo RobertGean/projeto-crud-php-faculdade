@@ -1,15 +1,13 @@
 <?php
 /**
  * @var array $filtros
- * @var array<string, string> $tipos
- * @var array<string, string> $formas
  * @var \App\Models\Cliente[] $clientes
  * @var \App\Patterns\Factory\Relatorio $relatorio
  * @var array $resumo
  * @var array $maisVendidos
  * @var array $porForma
- * @var \App\Models\Venda[] $vendas         (tipo "periodo")
- * @var array $linhas                       (tipos "cliente" e "produto")
+ * @var \App\Models\Venda[] $vendas
+ * @var array $linhas
  * @var \App\Core\Paginacao|null $paginacao
  */
 use App\Core\View;

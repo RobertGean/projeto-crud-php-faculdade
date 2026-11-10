@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Validações reutilizáveis (CPF, e-mail, datas, números).
- */
 final class Validador
 {
-    /** Valida CPF pelos dígitos verificadores. Aceita com ou sem máscara. */
     public static function cpf(string $cpf): bool
     {
         $cpf = self::somenteDigitos($cpf);
@@ -37,7 +33,6 @@ final class Validador
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
-    /** Data no formato do input type="date" (AAAA-MM-DD). */
     public static function data(string $data): bool
     {
         $objeto = \DateTime::createFromFormat('!Y-m-d', $data);
@@ -49,7 +44,6 @@ final class Validador
         return (string) preg_replace('/\D/', '', $valor);
     }
 
-    /** "1.234,56" ou "1234.56" => 1234.56; vazio/inválido => null */
     public static function paraDecimal(string $valor): ?float
     {
         $valor = trim(str_replace(['R$', ' '], '', $valor));

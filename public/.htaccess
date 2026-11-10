@@ -1,4 +1,3 @@
-# Front Controller: tudo que não for arquivo real vai para index.php
 Options -Indexes
 DirectoryIndex index.php
 

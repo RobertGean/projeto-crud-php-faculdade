@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Controller base. Os controllers recebem a requisição, validam a entrada,
- * chamam Services/Repositories e escolhem a View. Não contêm SQL nem HTML.
- */
 abstract class Controller
 {
     protected Request $request;
@@ -35,7 +31,6 @@ abstract class Controller
         exit;
     }
 
-    /** ID da rota (?id=5 ou /rota/5). Retorna 0 se ausente/inválido. */
     protected function id(): int
     {
         return max(0, $this->request->inteiro('id'));

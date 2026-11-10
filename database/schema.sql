@@ -1,15 +1,5 @@
--- =====================================================================
--- PDV MVC — Schema PostgreSQL (Neon)
--- Idempotente: pode ser executado várias vezes sem erro. A tabela
--- "produtos" já existe no banco do sistema legado, por isso só
--- acrescentamos colunas/constraints que faltam.
--- =====================================================================
-
 SET TIME ZONE 'America/Cuiaba';
 
--- ---------------------------------------------------------------------
--- Produtos (compatível com o sistema legado)
--- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS produtos (
     id             SERIAL PRIMARY KEY,
     cod            VARCHAR(50)    NOT NULL,
@@ -22,7 +12,6 @@ CREATE TABLE IF NOT EXISTS produtos (
     imagem         VARCHAR(255)
 );
 
--- Coluna nova: permite "inativar" produtos que já têm vendas (não podem ser excluídos)
 ALTER TABLE produtos ADD COLUMN IF NOT EXISTS ativo BOOLEAN NOT NULL DEFAULT TRUE;
 
 DO $$
@@ -36,13 +25,10 @@ BEGIN
     END IF;
 END $$;
 
--- ---------------------------------------------------------------------
--- Clientes
--- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS clientes (
     id              SERIAL PRIMARY KEY,
     nome            VARCHAR(150) NOT NULL,
-    cpf             CHAR(11)     NOT NULL UNIQUE,  -- somente dígitos
+    cpf             CHAR(11)     NOT NULL UNIQUE,
     email           VARCHAR(150),
     telefone        VARCHAR(20),
     endereco        VARCHAR(255),
@@ -52,9 +38,6 @@ CREATE TABLE IF NOT EXISTS clientes (
     atualizado_em   TIMESTAMPTZ  NULL
 );
 
--- ---------------------------------------------------------------------
--- Carrinhos
--- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS carrinhos (
     id            SERIAL PRIMARY KEY,
     cliente_id    INT NULL REFERENCES clientes (id) ON DELETE SET NULL,
@@ -73,9 +56,6 @@ CREATE TABLE IF NOT EXISTS carrinho_itens (
     CONSTRAINT carrinho_itens_unico UNIQUE (carrinho_id, produto_id)
 );
 
--- ---------------------------------------------------------------------
--- Vendas
--- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS vendas (
     id              SERIAL PRIMARY KEY,
     carrinho_id     INT NULL REFERENCES carrinhos (id) ON DELETE SET NULL,
@@ -97,15 +77,12 @@ CREATE TABLE IF NOT EXISTS vendas (
 CREATE TABLE IF NOT EXISTS venda_itens (
     id             SERIAL PRIMARY KEY,
     venda_id       INT            NOT NULL REFERENCES vendas (id) ON DELETE CASCADE,
-    produto_id     INT            NOT NULL REFERENCES produtos (id), -- RESTRICT: produto vendido não pode ser excluído
+    produto_id     INT            NOT NULL REFERENCES produtos (id),
     quantidade     INT            NOT NULL CHECK (quantidade > 0),
     preco_unitario NUMERIC(10, 2) NOT NULL,
     subtotal       NUMERIC(10, 2) NOT NULL
 );
 
--- ---------------------------------------------------------------------
--- Índices
--- ---------------------------------------------------------------------
 CREATE INDEX IF NOT EXISTS idx_vendas_criado_em      ON vendas (criado_em);
 CREATE INDEX IF NOT EXISTS idx_vendas_cliente_id     ON vendas (cliente_id);
 CREATE INDEX IF NOT EXISTS idx_venda_itens_produto   ON venda_itens (produto_id);

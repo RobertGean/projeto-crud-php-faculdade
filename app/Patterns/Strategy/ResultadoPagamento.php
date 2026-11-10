@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Patterns\Strategy;
 
-/**
- * Objeto de valor com o resultado do cálculo de uma forma de pagamento.
- */
 final class ResultadoPagamento
 {
     public function __construct(

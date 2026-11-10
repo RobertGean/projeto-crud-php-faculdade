@@ -10,9 +10,6 @@ use App\Repositories\CarrinhoRepository;
 use App\Repositories\ProdutoRepository;
 use App\Repositories\VendaRepository;
 
-/**
- * Início / Dashboard: indicadores do dia e do mês, estoque baixo e validade próxima.
- */
 final class HomeController extends Controller
 {
     public function index(): void

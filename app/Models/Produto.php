@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-/**
- * Entidade Produto (tabela produtos).
- */
 final class Produto
 {
     public function __construct(
@@ -39,7 +36,6 @@ final class Produto
         );
     }
 
-    /** Dados no formato dos campos do formulário (usado para preencher a tela de edição). */
     public function paraFormulario(): array
     {
         return [

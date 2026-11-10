@@ -8,15 +8,10 @@ use App\Core\Config;
 use App\Core\Logger;
 use App\Core\RegraNegocioException;
 
-/**
- * Upload de imagens de produtos com validação — no legado o arquivo era movido sem
- * nenhuma checagem e com o nome original (risco de sobrescrever e de enviar .php).
- */
 final class UploadService
 {
     private string $diretorio;
     private int $tamanhoMax;
-    /** @var array<string, string> mime => extensão */
     private array $tipos;
 
     public function __construct(?string $diretorio = null)
@@ -26,10 +21,6 @@ final class UploadService
         $this->tipos = (array) Config::get('upload.tipos', []);
     }
 
-    /**
-     * Valida e salva a imagem. Retorna o nome do arquivo gravado.
-     * @throws RegraNegocioException com mensagem amigável
-     */
     public function salvarImagem(array $arquivo): string
     {
         $erro = (int) ($arquivo['error'] ?? UPLOAD_ERR_NO_FILE);
@@ -46,7 +37,6 @@ final class UploadService
             throw new RegraNegocioException('A imagem deve ter no máximo ' . ($this->tamanhoMax / 1024 / 1024) . ' MB.');
         }
 
-        // O tipo é descoberto pelo conteúdo do arquivo, não pela extensão enviada pelo navegador.
         $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($tmp) ?: '';
         if (!isset($this->tipos[$mime]) || @getimagesize($tmp) === false) {
             throw new RegraNegocioException('Formato de imagem não permitido. Envie JPG, PNG ou WEBP.');
@@ -57,7 +47,6 @@ final class UploadService
             throw new RegraNegocioException('Não foi possível salvar a imagem (pasta de uploads indisponível).');
         }
 
-        // Nome único: evita sobrescrever imagens e não usa o nome digitado pelo usuário.
         $nome = date('YmdHis') . '-' . bin2hex(random_bytes(8)) . '.' . $this->tipos[$mime];
 
         if (!@move_uploaded_file($tmp, $this->diretorio . '/' . $nome)) {

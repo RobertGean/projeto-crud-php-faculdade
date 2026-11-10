@@ -1,6 +1,3 @@
-// Comportamentos simples de interface (sem dependências além do Bootstrap).
-
-// Confirmação antes de enviar formulários destrutivos (excluir, cancelar...).
 document.addEventListener('submit', function (evento) {
     var form = evento.target;
     var mensagem = form.getAttribute('data-confirmar');
@@ -9,8 +6,7 @@ document.addEventListener('submit', function (evento) {
     }
 });
 
-// Prévia do pagamento na tela do carrinho: mostra desconto/acréscimo, total e troco.
-// O cálculo oficial é feito no servidor pelas classes Strategy; aqui é só uma prévia.
+// Prévia apenas visual: o cálculo oficial é feito no servidor pelas classes Strategy.
 (function () {
     var form = document.getElementById('form-finalizar');
     if (!form) {

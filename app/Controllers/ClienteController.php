@@ -15,9 +15,6 @@ use App\Repositories\Contracts\ClienteRepositoryInterface;
 use App\Repositories\Contracts\VendaRepositoryInterface;
 use App\Repositories\VendaRepository;
 
-/**
- * 1 – CRUD de Cadastro de Clientes.
- */
 final class ClienteController extends Controller
 {
     private ClienteRepositoryInterface $clientes;
@@ -29,7 +26,6 @@ final class ClienteController extends Controller
         $this->vendas = new VendaRepository();
     }
 
-    /** READ – listagem com busca e paginação */
     public function index(): void
     {
         $busca = $this->request->texto('busca');
@@ -44,7 +40,6 @@ final class ClienteController extends Controller
         ]);
     }
 
-    /** READ – detalhes + histórico de compras */
     public function ver(): void
     {
         $cliente = $this->clientes->buscarPorId($this->id()) ?? $this->naoEncontrado('Cliente não encontrado.');
@@ -66,7 +61,6 @@ final class ClienteController extends Controller
         ]);
     }
 
-    /** CREATE */
     public function novo(): void
     {
         $this->formulario((new Cliente())->paraFormulario(), []);
@@ -86,7 +80,6 @@ final class ClienteController extends Controller
         $this->redirecionar('clientes/ver', ['id' => $id]);
     }
 
-    /** UPDATE */
     public function editar(): void
     {
         $cliente = $this->clientes->buscarPorId($this->id()) ?? $this->naoEncontrado('Cliente não encontrado.');
@@ -110,7 +103,6 @@ final class ClienteController extends Controller
         $this->redirecionar('clientes/ver', ['id' => $cliente->id]);
     }
 
-    /** DELETE – exclui; se já tiver vendas, apenas inativa (preserva o histórico) */
     public function excluir(): void
     {
         $cliente = $this->clientes->buscarPorId($this->id()) ?? $this->naoEncontrado('Cliente não encontrado.');
@@ -138,7 +130,6 @@ final class ClienteController extends Controller
         ], $erros ? 422 : 200);
     }
 
-    /** @return array{0: array, 1: array<string, string>} */
     private function validar(?int $ignorarId = null): array
     {
         $dados = [
@@ -149,7 +140,6 @@ final class ClienteController extends Controller
             'telefone'        => $this->request->texto('telefone'),
             'endereco'        => $this->request->texto('endereco'),
             'data_nascimento' => $this->request->texto('data_nascimento'),
-            // Novo cliente nasce ativo; na edição vale o checkbox.
             'ativo'           => $ignorarId === null || $this->request->texto('ativo') === '1',
         ];
         $erros = [];

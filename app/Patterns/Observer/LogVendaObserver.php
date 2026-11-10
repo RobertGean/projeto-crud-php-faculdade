@@ -7,10 +7,6 @@ namespace App\Patterns\Observer;
 use App\Core\Logger;
 use App\Models\Venda;
 
-/**
- * Observer que registra cada venda finalizada/cancelada em storage/logs/vendas.log
- * (trilha de auditoria simples, independente do banco).
- */
 final class LogVendaObserver implements VendaObserver
 {
     public function atualizar(string $evento, Venda $venda): void

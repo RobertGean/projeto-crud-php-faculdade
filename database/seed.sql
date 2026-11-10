@@ -1,14 +1,5 @@
--- =====================================================================
--- PDV MVC — Dados de exemplo (execute depois do schema.sql)
--- Pode ser executado mais de uma vez: produtos/clientes usam ON CONFLICT
--- e as vendas de exemplo só são criadas se a tabela vendas estiver vazia.
--- =====================================================================
-
 SET TIME ZONE 'America/Cuiaba';
 
--- ---------------------------------------------------------------------
--- Produtos (~10). Alguns com estoque baixo e validade próxima para o dashboard.
--- ---------------------------------------------------------------------
 INSERT INTO produtos (cod, nome, categoria, validade, quantidade, preco_unitario, preco_pacote, imagem, ativo) VALUES
     ('7891000100103', 'Leite integral 1L',          'Laticínios', CURRENT_DATE + 12,  60,  5.49,  32.90, NULL, TRUE),
     ('7894900011517', 'Refrigerante cola 2L',       'Bebidas',    CURRENT_DATE + 180, 48,  9.99,  56.90, NULL, TRUE),
@@ -22,9 +13,6 @@ INSERT INTO produtos (cod, nome, categoria, validade, quantidade, preco_unitario
     ('7891000053508', 'Iogurte morango 170g',       'Laticínios', CURRENT_DATE - 2,   8,   3.29,  18.90, NULL, TRUE)
 ON CONFLICT (cod) DO NOTHING;
 
--- ---------------------------------------------------------------------
--- Clientes (5) — CPFs válidos (gerados para teste)
--- ---------------------------------------------------------------------
 INSERT INTO clientes (nome, cpf, email, telefone, endereco, data_nascimento, ativo) VALUES
     ('Ana Paula Souza',     '52998224725', 'ana.souza@example.com',   '(65) 99999-1001', 'Rua das Flores, 120 - Centro, Cuiabá/MT',    '1990-04-12', TRUE),
     ('Bruno Henrique Lima', '11144477735', 'bruno.lima@example.com',  '(65) 98888-2002', 'Av. Fernando Corrêa, 450 - Coxipó, Cuiabá/MT', '1985-09-30', TRUE),
@@ -33,10 +21,6 @@ INSERT INTO clientes (nome, cpf, email, telefone, endereco, data_nascimento, ati
     ('Elaine Rodrigues',    '28625587887', 'elaine.r@example.com',    NULL,              NULL,                                            '1979-11-21', TRUE)
 ON CONFLICT (cpf) DO NOTHING;
 
--- ---------------------------------------------------------------------
--- Vendas de exemplo (carrinho finalizado + venda + itens + baixa de estoque)
--- Mesmas regras das classes Strategy: dinheiro -5%, PIX -2%, débito 0%, crédito +3%.
--- ---------------------------------------------------------------------
 DO $$
 DECLARE
     r          RECORD;
@@ -98,7 +82,6 @@ BEGIN
         SELECT v_venda, produto_id, quantidade, preco_unitario, quantidade * preco_unitario
         FROM carrinho_itens WHERE carrinho_id = v_carrinho;
 
-        -- Baixa de estoque (o CHECK quantidade >= 0 impede valores negativos)
         UPDATE produtos p SET quantidade = p.quantidade - ci.quantidade
         FROM carrinho_itens ci
         WHERE ci.carrinho_id = v_carrinho AND ci.produto_id = p.id;

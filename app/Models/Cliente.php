@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-/**
- * Entidade Cliente (tabela clientes).
- */
 final class Cliente
 {
     public function __construct(

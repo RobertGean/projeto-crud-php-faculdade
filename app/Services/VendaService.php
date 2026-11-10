@@ -23,15 +23,9 @@ use App\Repositories\VendaRepository;
 use PDO;
 use Throwable;
 
-/**
- * SERVICE LAYER + SUBJECT do padrão Observer.
- *
- * Encapsula as operações de venda que envolvem várias tabelas. Cada uma roda numa
- * transação (beginTransaction/commit/rollBack): ou tudo é gravado, ou nada é.
- */
+/** Service Layer e Subject do Observer: cada caso de uso de venda roda em uma transação. */
 final class VendaService implements VendaSubject
 {
-    /** @var VendaObserver[] */
     private array $observers = [];
 
     public function __construct(
@@ -42,7 +36,6 @@ final class VendaService implements VendaSubject
     ) {
     }
 
-    /** Monta o serviço com os observadores padrão do sistema. */
     public static function padrao(): self
     {
         $produtos = new ProdutoRepository();
@@ -51,8 +44,6 @@ final class VendaService implements VendaSubject
         $servico->anexar(new LogVendaObserver());
         return $servico;
     }
-
-    // ---------------------------------------------------------------- Observer
 
     public function anexar(VendaObserver $observer): void
     {
@@ -71,17 +62,6 @@ final class VendaService implements VendaSubject
         }
     }
 
-    // ---------------------------------------------------------------- Casos de uso
-
-    /**
-     * Finaliza o carrinho gerando uma venda.
-     *  1. trava o carrinho e confere se ainda está aberto;
-     *  2. trava cada produto (SELECT ... FOR UPDATE) e confere o estoque — duas vendas
-     *     simultâneas do mesmo produto não conseguem deixar o estoque negativo;
-     *  3. calcula desconto/acréscimo/troco com a Strategy da forma de pagamento;
-     *  4. grava vendas + venda_itens e notifica os observers (baixa de estoque e log);
-     *  5. marca o carrinho como finalizado e faz commit.
-     */
     public function finalizar(int $carrinhoId, string $formaPagamento, ?float $valorRecebido, ?string $observacao = null): Venda
     {
         $estrategia = FormaPagamentoFactory::criar($formaPagamento);
@@ -137,7 +117,6 @@ final class VendaService implements VendaSubject
         });
     }
 
-    /** Cancela a venda e devolve os itens ao estoque (via BaixaEstoqueObserver). */
     public function cancelar(int $vendaId, string $motivo = ''): Venda
     {
         return $this->emTransacao(function () use ($vendaId, $motivo): Venda {
@@ -156,10 +135,6 @@ final class VendaService implements VendaSubject
         });
     }
 
-    /**
-     * Atualiza forma de pagamento e observação, recalculando os valores com a nova Strategy.
-     * Para dinheiro, mantém o valor recebido informado (ou o total, se não informado).
-     */
     public function atualizar(int $vendaId, string $formaPagamento, ?float $valorRecebido, ?string $observacao): Venda
     {
         $estrategia = FormaPagamentoFactory::criar($formaPagamento);
@@ -188,7 +163,6 @@ final class VendaService implements VendaSubject
         });
     }
 
-    /** Exclusão definitiva: somente de vendas já canceladas (o estoque já foi estornado). */
     public function excluir(int $vendaId): void
     {
         $this->emTransacao(function () use ($vendaId): void {
@@ -200,11 +174,6 @@ final class VendaService implements VendaSubject
         });
     }
 
-    /**
-     * @template T
-     * @param callable(): T $operacao
-     * @return T
-     */
     private function emTransacao(callable $operacao): mixed
     {
         $pdo = $this->conexao ??= Database::getInstance();

@@ -9,9 +9,6 @@ use App\Models\ItemCarrinho;
 use App\Repositories\Contracts\CarrinhoRepositoryInterface;
 use PDO;
 
-/**
- * PADRÃO REPOSITORY — carrinhos e seus itens (PostgreSQL).
- */
 final class CarrinhoRepository extends Repository implements CarrinhoRepositoryInterface
 {
     private const SQL_ITENS = 'SELECT ci.*, p.nome AS produto_nome, p.cod AS produto_cod, p.quantidade AS estoque, p.imagem AS produto_imagem

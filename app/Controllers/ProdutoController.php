@@ -15,9 +15,6 @@ use App\Repositories\Contracts\ProdutoRepositoryInterface;
 use App\Repositories\ProdutoRepository;
 use App\Services\UploadService;
 
-/**
- * CRUD de produtos (refatoração de index.html, salvar_produto.php, editar_produto.php e pdv.php).
- */
 final class ProdutoController extends Controller
 {
     private ProdutoRepositoryInterface $produtos;
@@ -72,7 +69,6 @@ final class ProdutoController extends Controller
 
     public function editar(): void
     {
-        // Corrige o "Undefined variable $produto" do legado: sem id válido => 404 amigável.
         $produto = $this->produtos->buscarPorId($this->id()) ?? $this->naoEncontrado('Produto não encontrado.');
         $this->formulario($produto->paraFormulario(), []);
     }
@@ -158,7 +154,6 @@ final class ProdutoController extends Controller
         ], $erros ? 422 : 200);
     }
 
-    /** @return array{0: array, 1: array<string, string>} [dados digitados, erros por campo] */
     private function validar(?int $ignorarId = null): array
     {
         $dados = [

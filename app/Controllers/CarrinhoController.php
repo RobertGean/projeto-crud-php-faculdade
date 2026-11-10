@@ -16,11 +16,6 @@ use App\Repositories\ProdutoRepository;
 use App\Services\CarrinhoService;
 use App\Services\VendaService;
 
-/**
- * 2 – CRUD do Carrinho de Vendas.
- *  Create: novo/criar · Read: index (abertos) e ver · Update: adicionar, atualizar-item, cliente
- *  Delete: remover-item, esvaziar, cancelar, excluir · Finalizar: gera a venda (VendaService)
- */
 final class CarrinhoController extends Controller
 {
     private CarrinhoService $carrinhos;
@@ -34,7 +29,6 @@ final class CarrinhoController extends Controller
         $this->produtos = new ProdutoRepository();
     }
 
-    /** READ – carrinhos abertos para retomar */
     public function index(): void
     {
         $this->render('carrinho/index', [
@@ -44,7 +38,6 @@ final class CarrinhoController extends Controller
         ]);
     }
 
-    /** CREATE – formulário (cliente opcional) */
     public function novo(): void
     {
         $this->render('carrinho/novo', [
@@ -69,7 +62,6 @@ final class CarrinhoController extends Controller
         $this->redirecionar('carrinho/ver', ['id' => $id]);
     }
 
-    /** READ – tela principal do carrinho (busca, itens, pagamento) */
     public function ver(): void
     {
         try {
@@ -95,7 +87,6 @@ final class CarrinhoController extends Controller
         ]);
     }
 
-    /** UPDATE – adiciona produto (pelo id da busca ou digitando o código) */
     public function adicionar(): void
     {
         $id = $this->id();
@@ -130,7 +121,6 @@ final class CarrinhoController extends Controller
         $this->redirecionar('carrinho/ver', ['id' => $id]);
     }
 
-    /** DELETE – remove um item */
     public function removerItem(): void
     {
         $id = $this->id();
@@ -179,7 +169,6 @@ final class CarrinhoController extends Controller
         $this->redirecionar('carrinho/ver', ['id' => $id]);
     }
 
-    /** Finaliza: Strategy (pagamento) + Observer (estoque/log) dentro de uma transação. */
     public function finalizar(): void
     {
         $id = $this->id();
@@ -199,7 +188,6 @@ final class CarrinhoController extends Controller
         $this->redirecionar('relatorios/venda', ['id' => $venda->id]);
     }
 
-    /** Executa uma ação do service transformando erros de regra de negócio em mensagem flash. */
     private function executar(callable $acao): bool
     {
         try {

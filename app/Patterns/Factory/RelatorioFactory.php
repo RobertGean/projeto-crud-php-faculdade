@@ -8,18 +8,9 @@ use App\Core\RegraNegocioException;
 use App\Repositories\Contracts\VendaRepositoryInterface;
 use App\Repositories\VendaRepository;
 
-/**
- * PADRÃO FACTORY METHOD (Criacional)
- *
- * Problema: a tela de relatórios e a exportação CSV precisam gerar relatórios diferentes
- * (por período, por cliente, por produto) a partir de um parâmetro "tipo" da URL.
- * Sem a fábrica, controller e exportação teriam o mesmo switch/case espalhado.
- * Solução: o método criar($tipo) é o único ponto que decide qual classe concreta instanciar;
- * quem usa só conhece a interface Relatorio. Novo relatório = nova classe + uma linha aqui.
- */
+/** Factory Method: decide qual relatório concreto instanciar a partir do tipo. */
 final class RelatorioFactory
 {
-    /** @var array<string, class-string<Relatorio>> */
     private const TIPOS = [
         'periodo' => RelatorioPorPeriodo::class,
         'cliente' => RelatorioPorCliente::class,
@@ -32,7 +23,6 @@ final class RelatorioFactory
         return new $classe($vendas ?? new VendaRepository());
     }
 
-    /** @return array<string, string> tipo => título (para o seletor da tela) */
     public static function tipos(): array
     {
         return [

@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Acesso somente leitura às configurações carregadas de config/config.php.
- * Aceita chaves com ponto: Config::get('upload.tamanho_max').
- */
 final class Config
 {
     private static array $valores = [];
